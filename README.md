@@ -48,10 +48,11 @@
 * **Action & Emergency Components:** Neon Red / Coral (`#FF4757`)[span_17](start_span)[span_17](end_span)
 * **Geospatial & Cognitive AI Nodes:** Electric Cyan (`#00D2D3`)[span_18](start_span)[span_18](end_span)
 
+
 ## 🔗 Live Demo
 
 Deploy লিংকটি দেখতে এবং অ্যাপটি সরাসরি ব্যবহার করতে নিচের বাটনে ক্লিক করুন:
 
-[![Live Demo](https://img.shields.io/badge/🟢%20Live%20Demo-Visit%20SafeChild%20App-00D2D3?style=for-the-badge&logo=vercel&logoColor=white)](https://41.appmedo.com)
+[![Live Demo](https://img.shields.io/badge/🟢%20Live%20Demo-Visit%20SafeChild%20App-00D2D3?style=for-the-badge&logo=vercel&logoColor=white)](https://app-cdk7t9oatj41.appmedo.com/)
 
 ---
