@@ -7,7 +7,7 @@
 ## 📸 App Previews
 
 <p align="center">
-  <img src="AXRecorder_20260616_04_2.jpg" width="280" alt="Live GPS Tracking Map" />
+  <img src="AXRecorder_20260616_04.jpg" width="280" alt="Live GPS Tracking Map" />
   <img src="AXRecorder_20260616_05_2.jpg" width="280" alt="SOS Emergency Panel" />
   <img src="AXRecorder_20260616_06_2.jpg" width="280" alt="Gemini First Aid AI Chat" />
 </p>
