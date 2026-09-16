@@ -1,45 +1,79 @@
 # 📋 Project Dependencies & Technical Requirements
 
-This document outlines the structural dependencies, system specifications, and environment metrics required to execute and build the **SafeChild** AI safety platform locally.
+This document outlines the structural dependencies, system specifications, and environment
+setup required to run and build the **SafeChild** AI safety platform locally and in production.
 
 ---
 
 ## 🛠️ Core Infrastructure Stack
 
-| Dependency / Tool | Version | Target Purpose / Execution Node |
+| Dependency / Tool | Version | Purpose |
 | :--- | :--- | :--- |
-| **Node.js** | `>= 18.x.x` | JavaScript Runtime Environment |
-| **Vite** | `^5.3.1` | Next-generation Frontend Tooling & Dev Server |
-| **React** | `^18.3.1` | UI Library for Component-Driven Architecture |
-| **TypeScript** | `^5.2.2` | Static Type System for Robust Memory Scoping |
+| **Node.js** | `>= 18.x.x` | JavaScript runtime environment |
+| **Vite** | `^5.3.1` | Frontend build tool & dev server |
+| **React** | `^18.3.1` | UI library |
+| **TypeScript** | `^5.2.2` | Static typing |
+| **Leaflet / react-leaflet** | `^1.9.4` / `^4.2.1` | Live GPS map rendering |
 
 ---
 
-## 📦 Dynamic Software Modules (package.json Configuration)
+## 📦 Dependencies (package.json)
 
-### 🔵 Production Dependencies
-*   `react` (`^18.3.1`): Main application rendering matrix.
-*   `react-dom` (`^18.3.1`): Virtual-DOM binding connector.
+### Production
+* `react`, `react-dom` — UI rendering
+* `leaflet`, `react-leaflet` — interactive map + live location marker
 
-### 🔴 Development Dependencies
-*   `typescript` (`^5.2.2`): Local transpilation engine.
-*   `vite` (`^5.3.1`): Asset bundling and hot-reloading pipeline.
+### Development
+* `typescript` — type checking, compiled via `tsc` before build
+* `vite`, `@vitejs/plugin-react` — dev server & bundling
+* `@types/react`, `@types/react-dom`, `@types/leaflet` — type definitions
 
 ---
 
-## 🌐 Hardware & Browser API Interfacing Requirements
+## 🔐 Backend / API Architecture
 
-To successfully initiate all interactive safety workflows, the host deployment machine must support and allow access to the following underlying native system layers:
+SafeChild's First Aid chatbot is powered by **Gemini 2.5 Flash**, called through a secure
+**serverless function** (`api/gemini-chat.ts`), designed for deployment on **Vercel**.
 
-1.  **HTML5 Geolocation API:**
-    *   *Purpose:* Pulling active runtime latitude/longitude vectors.
-    *   *Permission Needed:* Secure Location Tracking prompt must be verified by the user.
-2.  **Web Speech Recognition API (Speech-to-Text Layer):**
-    *   *Purpose:* Real-time hardware microphone listening matrix for the `"Help Help"` phrase token.
-    *   *Permission Needed:* Microphone hardware permission access.
-3.  **Leaflet.js & OpenStreetMap CDN:**
-    *   *Purpose:* Rendering real-time geospatial coordinate movements across active Bangladesh mapping tiles.
-    *   *Network Layer:* Requires active web connections to pull mapping tiles via public OpenStreetMap infrastructure.
-4.  **Network Access & Gateway Integrity:**
-    *   *Purpose:* Transporting free-form first-aid diagnostic query arrays.
-    *   *Endpoint:* Secure serverless handshake to `https://app-cdk7t9oatj41.appmedo.com/api/gemini-chat` containing valid proxy gateway authentication headers (`X-Gateway-Authorization`).
+* The real `GEMINI_API_KEY` lives **only** in the server environment variable
+  (set in Vercel project settings, or in a local `.env` file when using `vercel dev`).
+  It is **never** sent to or exposed in the browser.
+* The frontend calls its own origin's `/api/gemini-chat` endpoint — no hardcoded external
+  gateway URLs or client-side auth headers are used.
+* The function validates the request, forwards the prompt to Gemini with a fixed system
+  prompt (first-aid guidance only, no diagnosis), and returns a reply plus an `escalate`
+  flag when the input or reply matches emergency keywords (e.g. unconscious, not breathing,
+  severe bleeding, poison — and their Bangla equivalents).
+
+### Local development
+1. Copy `.env.example` to `.env` and add your own Gemini API key
+   (get one from https://aistudio.google.com/app/apikey).
+2. Run `vercel dev` (or `vite` for frontend-only work — API calls will proxy to
+   `http://localhost:3000` per `vite.config.ts`).
+
+### Production
+Set `GEMINI_API_KEY` as an environment variable in the Vercel project dashboard before deploying.
+
+---
+
+## 🌐 Browser & Hardware API Requirements
+
+To use all interactive safety features, the device/browser must support and grant:
+
+1. **HTML5 Geolocation API** — for live latitude/longitude tracking on the map.
+2. **Web Speech Recognition API** — for the voice-activated `"Help"` SOS trigger.
+   Chrome/Chromium-based browsers currently have the most reliable support.
+3. **Microphone permission** — requested on app load for voice SOS.
+4. **Notification permission** — optional, used to confirm SOS actions (e.g. "Calling Contact 1...").
+5. **Network access** — required for OpenStreetMap map tiles and for the `/api/gemini-chat` endpoint.
+
+---
+
+## 📱 Known Limitations
+
+* Voice recognition (`Help` trigger) depends on browser support — not all mobile browsers
+  implement the Web Speech API consistently.
+* `tel:` links used for calling only work on devices with actual calling capability
+  (a phone/SIM) — they will not trigger a real call in a desktop browser.
+* The AI chatbot gives first-aid guidance only; it explicitly is not a substitute for
+  a doctor and always recommends contacting 999 or a guardian for serious situations.
