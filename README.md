@@ -1,6 +1,14 @@
 # 🛡️ SafeChild
 
-**SafeChild** is a premium, mobile-responsive web application explicitly designed to enhance children's safety and emergency response efficiency in Bangladesh. Built with a modern **Neon-Soft Minimalist UI**, the platform features dark theme consistency, continuous background processes for threat tracking, and smart serverless AI execution.
+**SafeChild** is a mobile-responsive web app built to improve children's personal safety and
+emergency response in Bangladesh. It combines live location tracking, hands-free voice-activated
+SOS calling, and an AI first-aid assistant — wrapped in a dark, neon-accented UI.
+
+---
+
+## 🔗 Live Demo
+
+[![Live Demo](https://img.shields.io/badge/🟢%20Live%20Demo-Visit%20SafeChild%20App-00D2D3?style=for-the-badge&logo=vercel&logoColor=white)](https://app-cdk7t9oatj41.appmedo.com/)
 
 ---
 
@@ -16,42 +24,101 @@
 
 ## ✨ Key Features
 
-### 📍 1. Live Bangladesh GPS Map
-* **Interactive Mapping:** Powered by Leaflet.js and OpenStreetMap layers centered seamlessly on Bangladesh.
-* **Real-time Geolocation:** Integrates native HTML5 Geolocation APIs to pull live latitude and longitude streams.
-* **Visual Identifiers:** Renders a unique pulsing, glowing **Electric Cyan live marker** tracking user displacement.
+### 📍 1. Live GPS Map
+- Interactive map powered by **Leaflet.js** + OpenStreetMap tiles, centered on the user's location.
+- Real-time position via the browser's native **HTML5 Geolocation API**, with an accuracy radius
+  drawn around the live marker.
 
-### 🚨 2. Intelligent SOS Help System
-* **Voice-Activated Triggers:** Features hands-free continuous processing listening specifically for the phrase `"Help Help"` using the Web Speech token mechanism.
-* **Alternating Call Routing Logic:** Cycling execution infrastructure that forwards emergency operations dynamically (First trigger targets Contact 1; subsequent continuous trigger routes to Contact 2).
-* **National Redirection:** Persistent high-contrast Neon Red backup panel targeting the direct **999 National Emergency Routing Hub**.
-* **Local Persistence:** Contact configuration updates are saved locally via browser `localStorage` ensuring configuration continuity across sessions.
+### 🚨 2. Voice-Activated SOS
+- Hands-free listening via the **Web Speech Recognition API** — saying **"help"** anywhere in
+  speech triggers an emergency call.
+- A 5-second cooldown prevents the same phrase from firing multiple calls back-to-back.
+- Call routing: dials the **primary contact** if one is saved, falls back to the **secondary
+  contact**, and if neither is set, calls the **999 national emergency line** directly.
+- Contact numbers are saved locally in the browser (`localStorage`), so they persist between visits.
+- A permanent, always-visible **999 button** is also available for manual one-tap emergency calling.
 
-### 🤖 3. First Aid Conversational AI
-* **Dual-Language Core:** Seamless semantic understanding across both **English** and **Bangla (বাংলা)** inputs.
-* **Medical Context Engine:** Driven by the **Gemini 2.5 Flash** large language model, delivering structured, highly empathetic step-by-step immediate treatment steps.
-* **Embedded Guardrail UI:** Permanent high-visibility yellow-bordered disclaimer highlighting clear operational limits—declaring it strictly a temporary support mechanism that does not replace real doctor prescriptions.
-
----
-
-## 🏗️ Technical Architecture & AI Workflow
-
-* **Data Entry (Inputs):** Free-form medical query strings (English/Bangla), browser-derived physical GPS coordinates, and real-time mic streaming tokens.
-* **Core Processing Engine:** Edge-routed function logic built securely around the **Gemini 2.5 Flash API** infrastructure. Secure gateway headers handle private operational keys (`X-Gateway-Authorization`) safely to mitigate malicious public intercepts.
-* **Outputs Received:** Dynamic UI rendering of tracked movement matrices, immediate dial triggers, and empathetic, markdown-compliant step-by-step clinical first aid walkthrough responses.
-
----
-
-## 🎨 UI Theme Metrics
-
-* **Background Matrix:** Dark Midnight Blue (`#0F172A`)
-* **Action & Emergency Components:** Neon Red / Coral (`#FF4757`)
-* **Geospatial & Cognitive AI Nodes:** Electric Cyan (`#00D2D3`)
+### 🤖 3. First Aid AI Chat
+- Bilingual (English + বাংলা) conversational assistant for basic first-aid guidance, powered by
+  **Gemini 2.5 Flash**.
+- Keyword-based escalation: if the message or AI reply mentions signs of a serious emergency
+  (unconscious, not breathing, severe bleeding, poisoning, etc.), the app flags it and recommends
+  calling 999 or a guardian immediately.
+- A persistent disclaimer makes clear this is first-aid guidance only, not a medical diagnosis or
+  a replacement for a doctor.
 
 ---
 
-## 🔗 Live Demo
+## 🏗️ Tech Stack
 
-Deploy লিংকটি দেখতে এবং অ্যাপটি সরাসরি ব্যবহার করতে নিচের বাটনে ক্লিক করুন:
+| Layer | Technology |
+| :--- | :--- |
+| Frontend | React 18 + TypeScript, built with Vite |
+| Mapping | Leaflet / react-leaflet |
+| AI | Gemini 2.5 Flash via the Gemini API |
+| Backend | Vercel Serverless Function (`api/gemini-chat.ts`) |
+| Styling | Custom CSS — dark theme, neon-accent UI |
 
-[![Live Demo](https://img.shields.io/badge/🟢%20Live%20Demo-Visit%20SafeChild%20App-00D2D3?style=for-the-badge&logo=vercel&logoColor=white)](https://app-cdk7t9oatj41.appmedo.com/)
+**Security note:** the Gemini API key is only ever read on the server side, inside the serverless
+function. It is never sent to or exposed in the browser — the frontend just calls its own
+`/api/gemini-chat` endpoint.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js ≥ 18
+- A free Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+### Local setup
+```bash
+# 1. Clone the repo
+git clone https://github.com/<your-username>/SafeChild.git
+cd SafeChild
+
+# 2. Install dependencies
+npm install
+
+# 3. Set up environment variables
+cp .env.example .env
+# then open .env and paste your GEMINI_API_KEY
+
+# 4. Run the app
+npm run dev        # frontend only (Vite), on http://localhost:5173
+# or, to also run the /api routes locally:
+vercel dev          # requires the Vercel CLI (npm i -g vercel)
+```
+
+### Build for production
+```bash
+npm run build
+```
+
+### Deploy
+The project is set up to deploy on **Vercel** — connect the GitHub repo, add `GEMINI_API_KEY` as
+an environment variable in the Vercel project settings, and deploy.
+
+---
+
+## 🎨 UI Theme
+
+| Element | Color |
+| :--- | :--- |
+| Background | Dark Midnight Blue `#0F172A` |
+| Emergency / SOS actions | Neon Red / Coral `#FF4757` |
+| Map & AI accents | Electric Cyan `#00D2D3` |
+
+---
+
+## ⚠️ Disclaimer
+
+SafeChild's AI assistant provides general first-aid information only. It is **not** a substitute
+for professional medical advice, diagnosis, or treatment. In any serious emergency, always call
+**999** or your nearest hospital immediately.
+
+---
+
+## 📄 License
+
+This project was built for the **Bangladesh ICT & Innovation Awards 2026**.
