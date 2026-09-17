@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Circle, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { ref, set } from 'firebase/database';
+import { db } from './firebase';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -31,6 +33,14 @@ export default function App() {
   });
   const [lastHeard, setLastHeard] = useState<string>('');
 
+  const [shareCode] = useState<string>(() => {
+    const saved = localStorage.getItem('safechild_share_code');
+    if (saved) return saved;
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    localStorage.setItem('safechild_share_code', code);
+    return code;
+  });
+
   const recognitionRef = useRef<any>(null);
   const lastTriggerRef = useRef<number>(0);
 
@@ -42,13 +52,19 @@ export default function App() {
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
           setAccuracy(position.coords.accuracy);
+
+          set(ref(db, 'locations/' + shareCode), {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            updatedAt: Date.now(),
+          }).catch((err) => console.error('Firebase location sync failed:', err));
         },
         (error) => console.error('Geolocator Error:', error),
         { enableHighAccuracy: true }
       );
       return () => navigator.geolocation.clearWatch(watchId);
     }
-  }, []);
+  }, [shareCode]);
 
   // ---- App খোলার সাথে সাথে mic + notification permission চাওয়া ----
   useEffect(() => {
@@ -189,6 +205,10 @@ export default function App() {
       <header style={{ marginBottom: '20px' }}>
         <h1 style={{ color: '#00D2D3', fontSize: '24px', fontWeight: 'bold' }}>🛡️ SafeChild</h1>
         <p style={{ color: '#94A3B8', fontSize: '12px' }}>AI Safety Ecosystem for BD</p>
+        <div style={{ marginTop: '8px', backgroundColor: '#1E293B', display: 'inline-block', padding: '4px 10px', borderRadius: '8px' }}>
+          <span style={{ color: '#94A3B8', fontSize: '11px' }}>Guardian Code: </span>
+          <span style={{ color: '#00D2D3', fontSize: '13px', fontWeight: 700, letterSpacing: '1px' }}>{shareCode}</span>
+        </div>
       </header>
 
       {/* Real Leaflet Live GPS Map */}
