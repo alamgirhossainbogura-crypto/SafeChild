@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">SafeChild</string>
 
+    <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_nickname">Nickname</string>
     <string name="settings_password">Change password</string>
@@ -18,10 +19,10 @@
     <string name="status_unsafe">Unsafe</string>
     <string name="settings_logout">Log out</string>
 
+    <!-- Dialogs -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_save">Save</string>
-
     <string name="nickname_hint">Nickname (max 8 characters)</string>
     <string name="password_label">Password</string>
     <string name="wrong_password">Wrong password</string>
@@ -29,4 +30,17 @@
     <string name="set_safe_message">Enter your password to confirm that you are safe.</string>
     <string name="logout_confirm_title">Log out?</string>
     <string name="logout_confirm_message">Voice SOS protection will stop on this phone.</string>
+
+    <!-- Notifications -->
+    <string name="channel_sos_name">SOS alerts</string>
+    <string name="channel_sos_desc">Loud alerts when someone you are connected with needs help</string>
+    <string name="channel_general_name">General</string>
+    <string name="notif_sos_title">%1$s needs help (SOS)</string>
+    <string name="notif_sos_text">Tap to see the location on the map</string>
+    <string name="notif_safe_title">%1$s is safe</string>
+    <string name="notif_safe_text">The SOS has ended</string>
+    <string name="notif_request_title">%1$s wants to connect</string>
+    <string name="notif_request_text">Tap to accept or decline</string>
+    <string name="notif_accepted_title">Connection accepted</string>
+    <string name="notif_accepted_text">You can now see each other on the map</string>
 </resources>
