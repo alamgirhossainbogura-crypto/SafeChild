@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">SafeChild</string>
+
+    <string name="settings_title">সেটিংস</string>
+    <string name="settings_nickname">ডাকনাম</string>
+    <string name="settings_password">পাসওয়ার্ড বদলান</string>
+    <string name="settings_always_on">সবসময় চালু</string>
+    <string name="settings_always_on_desc">ফোন লক থাকলেও ব্যাকগ্রাউন্ডে \"help help\" বা \"বাঁচাও বাঁচাও\" শোনা</string>
+    <string name="settings_track_me">আমাকে ট্র্যাক করা</string>
+    <string name="settings_track_me_desc">চালু থাকলে যাদের সঙ্গে কানেক্টেড, তারা আপনার লোকেশন দেখতে পারবে</string>
+    <string name="settings_track_person">কাউকে ট্র্যাক করুন</string>
+    <string name="settings_language">ভাষা</string>
+    <string name="settings_pair_code">পেয়ার কোড বদলান</string>
+    <string name="settings_country">দেশ</string>
+    <string name="settings_country_other">অন্য দেশ (%1$s)</string>
+    <string name="settings_status">অবস্থা</string>
+    <string name="status_safe">নিরাপদ</string>
+    <string name="status_unsafe">অনিরাপদ</string>
+    <string name="settings_logout">লগআউট</string>
+
+    <string name="dialog_ok">ঠিক আছে</string>
+    <string name="dialog_cancel">বাতিল</string>
+    <string name="dialog_save">সংরক্ষণ</string>
+
+    <string name="nickname_hint">ডাকনাম (সর্বোচ্চ ৮ অক্ষর)</string>
+    <string name="password_label">পাসওয়ার্ড</string>
+    <string name="wrong_password">পাসওয়ার্ড ভুল</string>
+    <string name="set_safe_title">অবস্থা নিরাপদ করুন</string>
+    <string name="set_safe_message">আপনি নিরাপদ, এটা নিশ্চিত করতে পাসওয়ার্ড দিন।</string>
+    <string name="logout_confirm_title">লগআউট করবেন?</string>
+    <string name="logout_confirm_message">এই ফোনে ভয়েস SOS সুরক্ষা বন্ধ হয়ে যাবে।</string>
+</resources>
