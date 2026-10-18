@@ -1,6 +1,39 @@
-node_modules
-dist
+# ---------- Secrets: never commit these ----------
 .env
-.env.local
-.vercel
+.env.*
+!.env.example
+*.jks
+*.keystore
+keystore.properties
+local.properties
+google-services.json
+serviceAccountKey*.json
+.runtimeconfig.json
+
+# ---------- Node: web prototype and functions ----------
+node_modules/
+dist/
+.vite/
+coverage/
 *.log
+npm-debug.log*
+firebase-debug.log*
+.firebase/
+functions/lib/
+
+# ---------- Android / Gradle ----------
+.gradle/
+**/build/
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.hprof
+
+# ---------- Editors and OS ----------
+.vscode/
+.DS_Store
+Thumbs.db
