@@ -8,6 +8,7 @@ import android.content.pm.ServiceInfo
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import com.safechild.data.SettingsStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -40,11 +41,15 @@ class SosForegroundService : Service() {
 
     private fun trigger() = engine.start(loadConfig())
 
-    private fun loadConfig() = SosConfig(
-        nickname = "Me",                                   // TODO read from settings
-        contacts = listOf("01XXXXXXXXX", "01YYYYYYYYY"),   // TODO read from settings
-        emergencyNumber = EmergencyNumbers.forCountry("BD") ?: "999", // TODO read the Country setting
-    )
+    private fun loadConfig(): SosConfig {
+        val settings = SettingsStore(this)
+        val numbers = EmergencyNumbers.load(this)
+        return SosConfig(
+            nickname = settings.nickname.ifBlank { "SafeChild user" },
+            contacts = listOf(settings.contact1, settings.contact2),
+            emergencyNumber = numbers.forCountry(settings.countryCode),
+        )
+    }
 
     private fun startAsForeground() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
