@@ -1,0 +1,1 @@
+export { firstAidChat } from "./gemini";
