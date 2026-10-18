@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">SafeChild</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_nickname">Nickname</string>
+    <string name="settings_password">Change password</string>
+    <string name="settings_always_on">Always on</string>
+    <string name="settings_always_on_desc">Listen for \"help help\" in the background, even when the phone is locked</string>
+    <string name="settings_track_me">Track me</string>
+    <string name="settings_track_me_desc">When on, the people you connected with can see your location</string>
+    <string name="settings_track_person">Track person</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_pair_code">Change pair code</string>
+    <string name="settings_country">Country</string>
+    <string name="settings_country_other">Other country (%1$s)</string>
+    <string name="settings_status">Status</string>
+    <string name="status_safe">Safe</string>
+    <string name="status_unsafe">Unsafe</string>
+    <string name="settings_logout">Log out</string>
+
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_save">Save</string>
+
+    <string name="nickname_hint">Nickname (max 8 characters)</string>
+    <string name="password_label">Password</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="set_safe_title">Set status to Safe</string>
+    <string name="set_safe_message">Enter your password to confirm that you are safe.</string>
+    <string name="logout_confirm_title">Log out?</string>
+    <string name="logout_confirm_message">Voice SOS protection will stop on this phone.</string>
+</resources>
