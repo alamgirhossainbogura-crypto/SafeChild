@@ -1,124 +1,91 @@
-# 🛡️ SafeChild
+# SafeChild
 
-**SafeChild** is a mobile-responsive web app built to improve children's personal safety and
-emergency response in Bangladesh. It combines live location tracking, hands-free voice-activated
-SOS calling, and an AI first-aid assistant — wrapped in a dark, neon-accented UI.
+SafeChild is a child and family safety app for Bangladesh and beyond. It combines hands-free voice SOS, an automatic call chain to trusted contacts and the local emergency number, a live family map, and a bilingual (English and Bangla) first aid assistant.
 
----
+> **Status:** the Android app is under development. A working web prototype exists. See [Project status](#project-status).
 
-## 🔗 Live Demo
+**Web prototype demo:** https://app-cdk7t9oatj41.appmedo.com
 
-[![Live Demo](https://img.shields.io/badge/🟢%20Live%20Demo-Visit%20SafeChild%20App-00D2D3?style=for-the-badge&logo=vercel&logoColor=white)](https://app-cdk7t9oatj41.appmedo.com/)
+## Features
 
----
+### Planned for the Android app
 
-## 📸 App Previews
+- **SOS** from three triggers: the in-app SOS button, the voice phrases "help help" or "বাঁচাও বাঁচাও" (also with the phone locked, when *Always on* is enabled), and a lock screen SOS button.
+- **Call chain:** first contact, then second contact, then the emergency number of the selected country. Unanswered contacts get an SMS with a map link. A "Stop calls" button ends the chain.
+- **Family map:** your own location in blue, connected people in green, and a person in SOS in red with the label "SOS". Up to 10 connections, shared only with consent.
+- **Safe / Unsafe status:** SOS sets you to Unsafe. You set Safe again with your password (works offline).
+- **First Aid AI:** text and voice input, answers in English, Bangla or Banglish, with a permanent medical disclaimer.
+- **Works offline:** SOS and settings work without internet. The map and AI need internet.
+- **Privacy:** nickname instead of real name, pair code instead of shared passwords, no audio recording.
 
-<p align="center">
-  <img src="AXRecorder_20260616_04.jpg" width="280" alt="Live GPS Tracking Map" />
-  <img src="AXRecorder_20260616_05.jpg" width="280" alt="SOS Emergency Panel" />
-  <img src="AXRecorder_20260616_06.jpg" width="280" alt="Gemini First Aid AI Chat" />
-</p>
+### Web prototype (available now)
 
----
+- Live GPS map (Leaflet and OpenStreetMap)
+- SOS Help tab with two emergency contacts, a voice command ("help") and a 999 button
+- First Aid AI chat (Gemini) in English and Bangla
 
-## ✨ Key Features
+## Project status
 
-### 📍 1. Live GPS Map
-- Interactive map powered by **Leaflet.js** + OpenStreetMap tiles, centered on the user's location.
-- Real-time position via the browser's native **HTML5 Geolocation API**, with an accuracy radius
-  drawn around the live marker.
+| Part | Status |
+|---|---|
+| Web prototype | Working |
+| Android SOS core (call chain, SMS, foreground service) | Draft code, not yet tested on a device |
+| Voice keyword detection (English and Bangla) | Not started, needs testing for Bangla |
+| Accounts, OTP, pairing | Designed, not built |
+| Map, live location, push notifications | Designed, not built |
+| First Aid AI in the Android app | Designed, not built |
+| Emergency number data | Compiled from public lists, needs verification |
 
-### 🚨 2. Voice-Activated SOS
-- Hands-free listening via the **Web Speech Recognition API** — saying **"help"** anywhere in
-  speech triggers an emergency call.
-- A 5-second cooldown prevents the same phrase from firing multiple calls back-to-back.
-- Call routing: dials the **primary contact** if one is saved, falls back to the **secondary
-  contact**, and if neither is set, calls the **999 national emergency line** directly.
-- Contact numbers are saved locally in the browser (`localStorage`), so they persist between visits.
-- A permanent, always-visible **999 button** is also available for manual one-tap emergency calling.
+## Repository layout
 
-### 🤖 3. First Aid AI Chat
-- Bilingual (English + বাংলা) conversational assistant for basic first-aid guidance, powered by
-  **Gemini 2.5 Flash**.
-- Keyword-based escalation: if the message or AI reply mentions signs of a serious emergency
-  (unconscious, not breathing, severe bleeding, poisoning, etc.), the app flags it and recommends
-  calling 999 or a guardian immediately.
-- A persistent disclaimer makes clear this is first-aid guidance only, not a medical diagnosis or
-  a replacement for a doctor.
+```
+SafeChild/
+├── android/          Kotlin Android app
+├── functions/        TypeScript backend (Firebase Cloud Functions)
+├── web-prototype/    Original web app
+├── data/             Emergency number reference data
+└── docs/             Documentation and screenshots
+```
 
----
+Emergency number details are in [docs/emergency-numbers.md](docs/emergency-numbers.md).
 
-## 🏗️ Tech Stack
+## Tech stack
 
 | Layer | Technology |
-| :--- | :--- |
-| Frontend | React 18 + TypeScript, built with Vite |
-| Mapping | Leaflet / react-leaflet |
-| AI | Gemini 2.5 Flash via the Gemini API |
-| Backend | Vercel Serverless Function (`api/gemini-chat.ts`) |
-| Styling | Custom CSS — dark theme, neon-accent UI |
+|---|---|
+| Android app | Kotlin, Jetpack Compose |
+| Backend | Firebase (Auth, Firestore, Cloud Messaging), TypeScript Cloud Functions |
+| Maps | OpenStreetMap |
+| AI | Gemini, called only from the server |
+| Web prototype | React, TypeScript, Vite, Leaflet |
 
-**Security note:** the Gemini API key is only ever read on the server side, inside the serverless
-function. It is never sent to or exposed in the browser — the frontend just calls its own
-`/api/gemini-chat` endpoint.
+The Gemini API key is only read on the server. It is never in the app or in this repository.
 
----
+## Run the web prototype
 
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js ≥ 18
-- A free Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-
-### Local setup
 ```bash
-# 1. Clone the repo
-git clone https://github.com/<your-username>/SafeChild.git
-cd SafeChild
-
-# 2. Install dependencies
+cd web-prototype
 npm install
-
-# 3. Set up environment variables
-cp .env.example .env
-# then open .env and paste your GEMINI_API_KEY
-
-# 4. Run the app
-npm run dev        # frontend only (Vite), on http://localhost:5173
-# or, to also run the /api routes locally:
-vercel dev          # requires the Vercel CLI (npm i -g vercel)
+cp .env.example .env     # add your GEMINI_API_KEY
+npm run dev
 ```
 
-### Build for production
-```bash
-npm run build
-```
+## Limitations
 
-### Deploy
-The project is set up to deploy on **Vercel** — connect the GitHub repo, add `GEMINI_API_KEY` as
-an environment variable in the Vercel project settings, and deploy.
+- If the phone is switched off, nothing works.
+- Background voice detection and calling from a locked phone depend on the phone model and Android version, and need real-device testing. Some brands (for example Xiaomi, Oppo, Vivo) stop background apps unless battery optimization is turned off.
+- Without internet, notifications to connected people are not delivered. Only SMS reaches contacts.
+- Emergency numbers come from public lists and are not official. Verify them before relying on them.
 
----
+## Disclaimer
 
-## 🎨 UI Theme
+SafeChild's AI assistant gives general first aid information only. It is not medical advice, diagnosis or treatment. In a serious emergency, call your local emergency number or go to the nearest hospital immediately.
 
-| Element | Color |
-| :--- | :--- |
-| Background | Dark Midnight Blue `#0F172A` |
-| Emergency / SOS actions | Neon Red / Coral `#FF4757` |
-| Map & AI accents | Electric Cyan `#00D2D3` |
+## Recognition
 
----
+- Shortlisted among the top 118 of 355 projects, BIIN Awards 2026
+- Finalist, USAII Hackathon
 
-## ⚠️ Disclaimer
+## License
 
-SafeChild's AI assistant provides general first-aid information only. It is **not** a substitute
-for professional medical advice, diagnosis, or treatment. In any serious emergency, always call
-**999** or your nearest hospital immediately.
-
----
-
-## 📄 License
-
-This project was built for the **Bangladesh ICT & Innovation Awards 2026**.
+MIT. See [LICENSE](LICENSE).
