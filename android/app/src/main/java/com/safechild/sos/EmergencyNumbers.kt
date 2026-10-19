@@ -1,15 +1,45 @@
 package com.safechild.sos
 
-/**
- * Country -> emergency number. Bundled in the app so it works offline.
- * Fill this table from a verified official source. Do not type numbers from memory:
- * a wrong number is dangerous. Some countries have separate police, ambulance and fire numbers.
- */
-object EmergencyNumbers {
-    private val byCountry: Map<String, String> = mapOf(
-        "BD" to "999",
-        // TODO: add the other countries from a verified list
-    )
+import android.content.Context
+import org.json.JSONObject
 
-    fun forCountry(code: String): String? = byCountry[code.uppercase()]
+data class CountryNumber(
+    val code: String,
+    val name: String,
+    val number: String,
+    val needsCheck: Boolean,
+)
+
+/**
+ * Reads assets/emergency_numbers_app.json. Works offline.
+ * An unknown country (or "OTHER") uses the fallback number from the file (112).
+ */
+class EmergencyNumbers private constructor(
+    val countries: List<CountryNumber>,
+    val fallbackNumber: String,
+) {
+    fun forCountry(code: String?): String =
+        countries.firstOrNull { it.code.equals(code, ignoreCase = true) }?.number ?: fallbackNumber
+
+    fun isKnown(code: String?): Boolean =
+        countries.any { it.code.equals(code, ignoreCase = true) }
+
+    companion object {
+        fun load(context: Context): EmergencyNumbers {
+            val text = context.assets.open("emergency_numbers_app.json")
+                .bufferedReader().use { it.readText() }
+            val root = JSONObject(text)
+            val arr = root.getJSONArray("countries")
+            val list = (0 until arr.length()).map { i ->
+                val o = arr.getJSONObject(i)
+                CountryNumber(
+                    code = o.getString("code"),
+                    name = o.getString("name"),
+                    number = o.getString("number"),
+                    needsCheck = o.optBoolean("review", false),
+                )
+            }
+            return EmergencyNumbers(list, root.getJSONObject("fallback").getString("number"))
+        }
+    }
 }
